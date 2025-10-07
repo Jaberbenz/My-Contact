@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../App.css";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login({ onSwitchToRegister }) {
@@ -12,38 +13,46 @@ export default function Login({ onSwitchToRegister }) {
   };
 
   return (
-    <div>
-      <h1>Connexion</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className="app-container">
+      <div className="card">
+        <h1>🔐 Connexion</h1>
+        {error && <div className="error-message">{error}</div>}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Email :</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="votre@email.com"
+            />
+          </div>
 
-        <div>
-          <label>Mot de passe:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label>Mot de passe :</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Votre mot de passe"
+            />
+          </div>
 
-        <button type="submit">Se connecter</button>
-      </form>
+          <button type="submit" className="btn btn-primary">
+            Se connecter
+          </button>
+        </form>
 
-      <p>
-        Pas de compte ?
-        <button onClick={onSwitchToRegister}>Créer un compte</button>
-      </p>
+        <p className="text-center mt-20">
+          Pas de compte ?
+          <button onClick={onSwitchToRegister} className="link">
+            Créer un compte
+          </button>
+        </p>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import "../App.css";
 
 export default function ContactForm({ contact, onClose }) {
   const [firstName, setFirstName] = useState("");
@@ -37,67 +38,82 @@ export default function ContactForm({ contact, onClose }) {
   };
 
   return (
-    <div>
-      <h2>{contact ? "Modifier le contact" : "Ajouter un contact"}</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className="app-container">
+      <div className="card contact-form">
+        <h2>{contact ? "✏️ Modifier le contact" : "➕ Ajouter un contact"}</h2>
+        {error && <div className="error-message">{error}</div>}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Prénom *:</label>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-            minLength={2}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Prénom * :</label>
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+              minLength={2}
+              placeholder="Jean"
+            />
+          </div>
 
-        <div>
-          <label>Nom *:</label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-            minLength={2}
-          />
-        </div>
+          <div className="form-group">
+            <label>Nom * :</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+              minLength={2}
+              placeholder="Dupont"
+            />
+          </div>
 
-        <div>
-          <label>Téléphone * (10-20 caractères):</label>
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-            pattern="[\d\s+\-()]{10,20}"
-          />
-        </div>
+          <div className="form-group">
+            <label>Téléphone * :</label>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              pattern="[\d\s+\-()]{10,20}"
+              placeholder="+33 6 12 34 56 78"
+            />
+          </div>
 
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+          <div className="form-group">
+            <label>Email :</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="jean.dupont@email.com"
+            />
+          </div>
 
-        <div>
-          <label>Adresse:</label>
-          <textarea
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            maxLength={200}
-          />
-        </div>
+          <div className="form-group">
+            <label>Adresse :</label>
+            <textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              maxLength={200}
+              placeholder="123 Rue de la Paix, 75001 Paris"
+            />
+          </div>
 
-        <button type="submit">{contact ? "Mettre à jour" : "Créer"}</button>
-        <button type="button" onClick={onClose}>
-          Annuler
-        </button>
-      </form>
+          <div className="form-actions">
+            <button type="submit" className="btn btn-primary">
+              {contact ? "Mettre à jour" : "Créer"}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn btn-secondary"
+            >
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

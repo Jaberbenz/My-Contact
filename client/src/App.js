@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css";
 import ContactList from "./components/ContactList";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -9,15 +10,13 @@ export default function App() {
   const [showRegister, setShowRegister] = useState(false);
 
   if (loading) {
-    return <div>Chargement...</div>;
+    return <div className="loading">🔄 Chargement...</div>;
   }
 
-  // Si utilisateur connecté, afficher les contacts
   if (user) {
     return <ContactList />;
   }
 
-  // Sinon, afficher login ou register
   return showRegister ? (
     <Register onSwitchToLogin={() => setShowRegister(false)} />
   ) : (
