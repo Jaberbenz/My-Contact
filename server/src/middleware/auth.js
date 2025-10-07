@@ -1,44 +1,55 @@
-import { verifyToken } from "../services/authService.js";
 import User from "../models/User.js";
+import { verifyToken } from "../services/authService.js";
 
-/**
- * Middleware pour protéger les routes privées
- * Vérifie le token JWT dans le header Authorization
- */
 export const requireAuth = async (req, res, next) => {
+  console.log("🔐 [AUTH MIDDLEWARE] Vérification du token...");
+  console.log(
+    "🔐 [AUTH MIDDLEWARE] Headers:",
+    req.headers.authorization ? "Token présent" : "Token absent"
+  );
+
   try {
-    // Récupérer le token du header Authorization
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      console.log("❌ [AUTH MIDDLEWARE] Token manquant ou format invalide");
       return res.status(401).json({
         success: false,
         message: "Accès refusé. Token manquant.",
       });
     }
 
-    // Extraire le token (enlever "Bearer ")
     const token = authHeader.substring(7);
+    console.log(
+      "🔐 [AUTH MIDDLEWARE] Token extrait (premiers 20 car):",
+      token.substring(0, 20) + "..."
+    );
 
-    // Vérifier et décoder le token
     const decoded = verifyToken(token);
+    console.log("🔐 [AUTH MIDDLEWARE] Token décodé, userId:", decoded.userId);
 
-    // Récupérer l'utilisateur depuis la base
     const user = await User.findById(decoded.userId);
     if (!user) {
+      console.log(
+        "❌ [AUTH MIDDLEWARE] Utilisateur introuvable pour ID:",
+        decoded.userId
+      );
       return res.status(401).json({
         success: false,
         message: "Utilisateur introuvable. Accès refusé.",
       });
     }
 
-    // Ajouter l'utilisateur à la requête
     req.user = user.toJSON();
     req.userId = user._id;
+    console.log(
+      "✅ [AUTH MIDDLEWARE] Authentification réussie pour:",
+      user.email
+    );
 
     next();
   } catch (error) {
-    console.error("Erreur requireAuth:", error);
+    console.error("❌ [AUTH MIDDLEWARE] Erreur:", error.message);
     res.status(401).json({
       success: false,
       message: "Token invalide ou expiré. Accès refusé.",
@@ -46,11 +57,9 @@ export const requireAuth = async (req, res, next) => {
   }
 };
 
-/**
- * Middleware optionnel pour récupérer l'utilisateur si connecté
- * Ne bloque pas la requête si pas de token
- */
 export const optionalAuth = async (req, res, next) => {
+  console.log("🔓 [OPTIONAL AUTH] Vérification optionnelle...");
+
   try {
     const authHeader = req.headers.authorization;
 
@@ -62,12 +71,15 @@ export const optionalAuth = async (req, res, next) => {
       if (user) {
         req.user = user.toJSON();
         req.userId = user._id;
+        console.log("✅ [OPTIONAL AUTH] Utilisateur authentifié:", user.email);
       }
+    } else {
+      console.log("ℹ️ [OPTIONAL AUTH] Aucun token, continuation sans auth");
     }
 
     next();
   } catch (error) {
-    // En cas d'erreur, on continue sans utilisateur
+    console.log("⚠️ [OPTIONAL AUTH] Erreur ignorée:", error.message);
     next();
   }
 };

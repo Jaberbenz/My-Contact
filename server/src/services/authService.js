@@ -16,9 +16,14 @@ export const verifyToken = (token) => {
 };
 
 export const createUserWithToken = async (userData) => {
+  console.log(
+    "🔧 [AUTH SERVICE] createUserWithToken - userData:",
+    userData.email
+  );
   const user = new User(userData);
   await user.save();
   const token = generateToken(user._id);
+  console.log("✅ [AUTH SERVICE] User créé et token généré");
 
   return {
     user: user.toJSON(),
@@ -27,20 +32,37 @@ export const createUserWithToken = async (userData) => {
 };
 
 export const authenticateUser = async (email, password) => {
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw Error("Email ou mot de passe invalide");
+  console.log("🔧 [AUTH SERVICE] authenticateUser - email:", email);
+
+  try {
+    console.log("🔍 [AUTH SERVICE] Recherche de l'utilisateur...");
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      console.log("❌ [AUTH SERVICE] Utilisateur non trouvé");
+      throw Error("Email ou mot de passe invalide");
+    }
+
+    console.log(
+      "✅ [AUTH SERVICE] Utilisateur trouvé, vérification du password..."
+    );
+    const isValidPassword = await user.comparePassword(password);
+
+    if (!isValidPassword) {
+      console.log("❌ [AUTH SERVICE] Password invalide");
+      throw Error("Email ou mot de passe incorrect");
+    }
+
+    console.log("✅ [AUTH SERVICE] Password valide, génération du token...");
+    const token = generateToken(user._id);
+    console.log("✅ [AUTH SERVICE] Token généré");
+
+    return {
+      user: user.toJSON(),
+      token,
+    };
+  } catch (error) {
+    console.error("❌ [AUTH SERVICE] Erreur:", error.message);
+    throw error;
   }
-
-  const isValidPassword = await user.comparePassword(password);
-  if (!isValidPassword) {
-    throw Error("Email ou mot de passe incorrect");
-  }
-
-  const token = generateToken(user._id);
-
-  return {
-    user: user.toJSON(),
-    token,
-  };
 };

@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import ContactList from "./components/ContactList";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import { useAuth } from "./context/AuthContext";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+export default function App() {
+  const { user, loading } = useAuth();
+  const [showRegister, setShowRegister] = useState(false);
+
+  if (loading) {
+    return <div>Chargement...</div>;
+  }
+
+  // Si utilisateur connecté, afficher les contacts
+  if (user) {
+    return <ContactList />;
+  }
+
+  // Sinon, afficher login ou register
+  return showRegister ? (
+    <Register onSwitchToLogin={() => setShowRegister(false)} />
+  ) : (
+    <Login onSwitchToRegister={() => setShowRegister(true)} />
   );
 }
-
-export default App;
