@@ -10,7 +10,19 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // ========== MIDDLEWARES ==========
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://joyful-melomakarona-8e87c1.netlify.app/", // ← Remplacez par votre vraie URL Netlify
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
