@@ -27,7 +27,7 @@ export default function ContactList() {
   return (
     <div>
       <div className="app-header">
-        <h1>📇 Mes Contacts</h1>
+        <h1> Mes Contacts</h1>
         <div className="user-info">
           <span className="user-email">👤 {user?.email}</span>
           <button onClick={logout} className="btn btn-secondary btn-small">

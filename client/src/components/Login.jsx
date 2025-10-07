@@ -72,7 +72,7 @@ export default function Login({ onSwitchToRegister }) {
   return (
     <div className="app-container">
       <div className="card">
-        <h1>🔐 Connexion</h1>
+        <h1> Connexion</h1>
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} noValidate>
@@ -87,7 +87,7 @@ export default function Login({ onSwitchToRegister }) {
               className={errors.email && touched.email ? "input-error" : ""}
             />
             {errors.email && touched.email && (
-              <span className="field-error">⚠️ {errors.email}</span>
+              <span className="field-error"> {errors.email}</span>
             )}
           </div>
 

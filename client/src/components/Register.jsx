@@ -123,7 +123,7 @@ export default function Register({ onSwitchToLogin }) {
   return (
     <div className="app-container">
       <div className="card">
-        <h1>📝 Inscription</h1>
+        <h1> Inscription</h1>
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} noValidate>
@@ -138,7 +138,7 @@ export default function Register({ onSwitchToLogin }) {
               className={errors.email && touched.email ? "input-error" : ""}
             />
             {errors.email && touched.email && (
-              <span className="field-error">⚠️ {errors.email}</span>
+              <span className="field-error"> {errors.email}</span>
             )}
           </div>
 
@@ -177,7 +177,7 @@ export default function Register({ onSwitchToLogin }) {
               </div>
             )}
             {errors.password && touched.password && (
-              <span className="field-error">⚠️ {errors.password}</span>
+              <span className="field-error"> {errors.password}</span>
             )}
           </div>
 
@@ -196,7 +196,7 @@ export default function Register({ onSwitchToLogin }) {
               }
             />
             {errors.confirmPassword && touched.confirmPassword && (
-              <span className="field-error">⚠️ {errors.confirmPassword}</span>
+              <span className="field-error"> {errors.confirmPassword}</span>
             )}
             {confirmPassword &&
               !errors.confirmPassword &&
